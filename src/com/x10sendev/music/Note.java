@@ -1,4 +1,4 @@
-package com.christensen.music;
+package com.x10sendev.music;
 
 public enum Note {
     A0(21), AS0(22),
