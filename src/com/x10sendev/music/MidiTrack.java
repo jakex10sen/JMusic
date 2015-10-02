@@ -32,12 +32,12 @@ public class MidiTrack {
 
     //Set track name (meta event)
     public void setTrackName(String trackName) throws InvalidMidiDataException {
-        addMetaMessage(0x03, trackName.getBytes(), 0);
+        addMetaMessage(0x03, trackName.getBytes(), (long) 0);
     }
 
     //Set instrument
     public void setInstrument(int instrument) throws InvalidMidiDataException {
-        addShortMessage(ShortMessage.PROGRAM_CHANGE, instrument, 0, 0);
+        addShortMessage(ShortMessage.PROGRAM_CHANGE, instrument, 0, (long) 0);
     }
     public void setEndOfTrack() throws InvalidMidiDataException {
         incTime(Note.WHOLE);

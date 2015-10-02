@@ -5,6 +5,7 @@ import com.x10sendev.music.MidiTrack;
 import com.x10sendev.music.Note;
 
 import javax.sound.midi.*;
+import java.io.File;
 import java.io.IOException;
 
 public class WriteMidi {
@@ -22,20 +23,20 @@ public class WriteMidi {
         bass.addSysexMessage(new byte[]{(byte) SysexMessage.SYSTEM_EXCLUSIVE, 0x7E, 0x7F, 0x09, 0x01, (byte) SysexMessage.SPECIAL_SYSTEM_EXCLUSIVE});
 
         // Set temp (meta event)
-        treble.addMetaMessage(0x51, new byte[]{0x02, (byte) 0x00, 0x00}, 0);
-        bass.addMetaMessage(0x51, new byte[]{0x02, (byte) 0x00, 0x00}, 0);
+        treble.addMetaMessage(0x51, new byte[]{0x02, (byte) 0x00, 0x00}, (long) 0);
+        bass.addMetaMessage(0x51, new byte[]{0x02, (byte) 0x00, 0x00}, (long) 0);
 
         //Set track name (meta event)
         treble.setTrackName("treble");
         bass.setTrackName("bass");
 
         //Set omni on
-        treble.addShortMessage(ShortMessage.CONTROL_CHANGE, 0x7D, 0, 0);
-        bass.addShortMessage(ShortMessage.CONTROL_CHANGE, 0x7D, 0, 0);
+        treble.addShortMessage(ShortMessage.CONTROL_CHANGE, 0x7D, 0x00, (long) 0);
+        bass.addShortMessage(ShortMessage.CONTROL_CHANGE, 0x7D, 0x00, (long) 0);
 
         //Set poly on
-        treble.addShortMessage(ShortMessage.CONTROL_CHANGE, 0x7E, 0, 0);
-        bass.addShortMessage(ShortMessage.CONTROL_CHANGE, 0x7E, 0, 0);
+        treble.addShortMessage(ShortMessage.CONTROL_CHANGE, 0x7E, 0, (long) 0);
+        bass.addShortMessage(ShortMessage.CONTROL_CHANGE, 0x7E, 0, (long) 0);
 
         //Set instrument
         treble.setInstrument(5);
@@ -382,6 +383,12 @@ public class WriteMidi {
         //set end of track (meta event)
         treble.setEndOfTrack();
         bass.setEndOfTrack();
+
+        File file = new File("Gravity_falls.mid");
+        for(int type : MidiSystem.getMidiFileTypes(s)){
+            System.out.println(type);
+        }
+        MidiSystem.write(s, 1, file);
 
         Sequencer sequencer = MidiSystem.getSequencer();
         sequencer.open();
