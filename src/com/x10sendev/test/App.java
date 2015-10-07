@@ -1,10 +1,6 @@
-package com.x10sendev;
-
-import com.x10sendev.music.Chord;
-import com.x10sendev.music.Note;
+package com.x10sendev.test;
 
 import javax.sound.midi.*;
-import java.util.Vector;
 
 public class App {
     public static void main(String[] args) throws InterruptedException {

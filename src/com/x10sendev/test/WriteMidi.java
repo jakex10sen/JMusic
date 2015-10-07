@@ -1,4 +1,4 @@
-package com.x10sendev;
+package com.x10sendev.test;
 
 import com.x10sendev.music.Chord;
 import com.x10sendev.music.MidiTrack;
@@ -14,9 +14,9 @@ public class WriteMidi {
 
 
     public static void main(String[] args) throws MidiUnavailableException, InvalidMidiDataException, IOException {
-        Sequence s = new Sequence(Sequence.PPQ, TICKS);
-        MidiTrack treble = new MidiTrack(s.createTrack());
-        MidiTrack bass = new MidiTrack(s.createTrack());
+        Sequence sequence = new Sequence(Sequence.PPQ, TICKS);
+        MidiTrack treble = new MidiTrack(sequence.createTrack());
+        MidiTrack bass = new MidiTrack(sequence.createTrack());
 
         // Turn on General MIDI sound set
         treble.addSysexMessage(new byte[]{(byte) SysexMessage.SYSTEM_EXCLUSIVE, 0x7E, 0x7F, 0x09, 0x01, (byte) SysexMessage.SPECIAL_SYSTEM_EXCLUSIVE});
@@ -385,14 +385,11 @@ public class WriteMidi {
         bass.setEndOfTrack();
 
         File file = new File("Gravity_falls.mid");
-        for(int type : MidiSystem.getMidiFileTypes(s)){
-            System.out.println(type);
-        }
-        MidiSystem.write(s, 1, file);
+        MidiSystem.write(sequence, 1, file);
 
         Sequencer sequencer = MidiSystem.getSequencer();
         sequencer.open();
-        sequencer.setSequence(s);
+        sequencer.setSequence(MidiSystem.getSequence(file));
         sequencer.start();
     }
 }
