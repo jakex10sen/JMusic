@@ -10,15 +10,16 @@ public class MidiDeviceTest {
         Transmitter transmitter;
         MidiDevice device;
         MidiDevice.Info midiDevInfo = null;
+        String deviceName = "MPKmini2";
         for (MidiDevice.Info info : MidiSystem.getMidiDeviceInfo()) {
             System.out.println(info.getName() + ": " + info.getVendor() + ": " + info.getDescription());
-            if (info.getName().contains("MPKmini2")) {
+            if (info.getName().contains(deviceName)) {
                 midiDevInfo = info;
                 break;
             }
         }
         if (midiDevInfo == null) {
-            System.err.println("ERROR: couldn't find MidiDevice");
+            System.err.println("ERROR: couldn't find " + deviceName);
             System.exit(-1);
         }
         synthesizer = MidiSystem.getSynthesizer();

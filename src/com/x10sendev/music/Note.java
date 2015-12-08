@@ -3,6 +3,10 @@ package com.x10sendev.music;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * An enum of Notes to add to Tracks/MidiTracks/MusicSequences
+ * also holds the common lengths of Notes
+ */
 public enum Note {
     A0(21, "A0"), AS0(22, "AS0"),
     B0(23, "B0"),
