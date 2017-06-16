@@ -28,13 +28,16 @@ public class MidiTrack {
      * Adds a SysexMessage to the start of the MidiTrack
      *
      * @param bytes message to be added
-     * @throws InvalidMidiDataException
      */
-    public void addSysexMessage(byte[] bytes) throws InvalidMidiDataException {
+    public void addSysexMessage(byte[] bytes) {
         SysexMessage sysexMessage = new SysexMessage();
-        sysexMessage.setMessage(bytes, bytes.length);
-        MidiEvent midiEvent = new MidiEvent(sysexMessage, (long) 0);
-        _track.add(midiEvent);
+        try {
+            sysexMessage.setMessage(bytes, bytes.length);
+            MidiEvent midiEvent = new MidiEvent(sysexMessage, (long) 0);
+            _track.add(midiEvent);
+        } catch (InvalidMidiDataException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -42,12 +45,15 @@ public class MidiTrack {
      * @param command the command to add to the track
      * @param bytes the message to add
      * @param time the place to add the messsage
-     * @throws InvalidMidiDataException
      */
-    public void addMetaMessage(int command, byte[] bytes, long time) throws InvalidMidiDataException {
-        MetaMessage metaMessage = new MetaMessage(command, bytes, bytes.length);
-        MidiEvent midiEvent = new MidiEvent(metaMessage, time);
-        _track.add(midiEvent);
+    public void addMetaMessage(int command, byte[] bytes, long time) {
+        try {
+            MetaMessage metaMessage = new MetaMessage(command, bytes, bytes.length);
+            MidiEvent midiEvent = new MidiEvent(metaMessage, time);
+            _track.add(midiEvent);
+        } catch (InvalidMidiDataException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -56,37 +62,37 @@ public class MidiTrack {
      * @param data1 the first bit of data to add
      * @param data2 the second bit of data to add
      * @param time the place to add the message
-     * @throws InvalidMidiDataException
      */
-    public void addShortMessage(int command, int data1, int data2, long time) throws InvalidMidiDataException {
-        ShortMessage shortMessage = new ShortMessage(command, data1, data2);
-        MidiEvent midiEvent = new MidiEvent(shortMessage, time);
-        _track.add(midiEvent);
+    public void addShortMessage(int command, int data1, int data2, long time) {
+        try {
+            ShortMessage shortMessage = new ShortMessage(command, data1, data2);
+            MidiEvent midiEvent = new MidiEvent(shortMessage, time);
+            _track.add(midiEvent);
+        } catch (InvalidMidiDataException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Sets the name of the MidiTrack
      * @param trackName the name to give the MidiTrack
-     * @throws InvalidMidiDataException
      */
-    public void setTrackName(String trackName) throws InvalidMidiDataException {
+    public void setTrackName(String trackName){
         addMetaMessage(0x03, trackName.getBytes(), (long) 0);
     }
 
     /**
      * Sets the Instrument of the MidiTrack
      * @param instrument the instrument to change to
-     * @throws InvalidMidiDataException
      */
-    public void setInstrument(int instrument) throws InvalidMidiDataException {
+    public void setInstrument(int instrument) {
         addShortMessage(ShortMessage.PROGRAM_CHANGE, instrument, 0, (long) 0);
     }
 
     /**
      * Ends the MidiTrack at the current timestamp
-     * @throws InvalidMidiDataException
      */
-    public void setEndOfTrack() throws InvalidMidiDataException {
+    public void setEndOfTrack() {
         incTime(Note.WHOLE);
         addMetaMessage(0x2F, new byte[0], _time);
     }
@@ -94,9 +100,8 @@ public class MidiTrack {
     /**
      * Adds a Chord to the MidiTrack
      * @param chord the Chord to add the MidiTrack
-     * @throws InvalidMidiDataException
      */
-    public void addChord(Chord chord) throws InvalidMidiDataException {
+    public void addChord(Chord chord) {
         long time = _time;
         incTime(chord.getLength());
         for(Note note : chord.getNotes()) {
@@ -110,9 +115,8 @@ public class MidiTrack {
      *
      * @param duration the duration of the Note
      * @param note     the Note to add
-     * @throws InvalidMidiDataException
      */
-    public void addNote(long duration, Note note) throws InvalidMidiDataException {
+    public void addNote(long duration, Note note) {
         addShortMessage(ShortMessage.NOTE_ON, note.code(), 127, _time);
         incTime(duration);
         addShortMessage(ShortMessage.NOTE_OFF, note.code(), 127, _time);

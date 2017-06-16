@@ -4,13 +4,11 @@ import com.x10sendev.music.Chord;
 import com.x10sendev.music.MusicSequence;
 import com.x10sendev.music.Note;
 
-import javax.sound.midi.*;
-import java.io.File;
-import java.io.IOException;
+import javax.sound.midi.Sequence;
 
 public class IWriteSinsNotTragedies {
 
-    public static void main(String[] args) throws InvalidMidiDataException, IOException, MidiUnavailableException {
+    public static void main(String[] args) {
         MusicSequence sequence = new MusicSequence(Sequence.PPQ, 3, 0);
 
         sequence.addRestTreble(Note.WHOLE);
@@ -182,11 +180,8 @@ public class IWriteSinsNotTragedies {
 
         //--------------------------------------------------------------------------------------------------------------
         sequence.endSequence();
-        sequence.write("IWriteSinsNotTragedies.mid");
-
-        Sequencer sequencer = MidiSystem.getSequencer();
-        sequencer.open();
-        sequencer.setSequence(MidiSystem.getSequence(new File("IWriteSinsNotTragedies.mid")));
-        sequencer.start();
+        String filename = "IWriteSinsNotTragedies.mid";
+        sequence.writeAndPlay(filename);
+        System.exit(0);
     }
 }

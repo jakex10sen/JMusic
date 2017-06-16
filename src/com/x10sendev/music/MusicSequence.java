@@ -27,10 +27,17 @@ public class MusicSequence {
      * @param divisionType the timing division type (PPQ or one of the SMPTE types)
      * @param resolution   the timing resolution
      * @param instrument   the instrument code
-     * @throws InvalidMidiDataException
      */
-    public MusicSequence(float divisionType, int resolution, int instrument) throws InvalidMidiDataException {
-        _sequence = new Sequence(divisionType, resolution);
+    public MusicSequence(float divisionType, int resolution, int instrument) {
+        try {
+            _sequence = new Sequence(divisionType, resolution);
+            initializeSequence(instrument);
+        } catch (InvalidMidiDataException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initializeSequence(int instrument) {
         _treble = new MidiTrack(_sequence.createTrack());
         _bass = new MidiTrack(_sequence.createTrack());
 
@@ -55,17 +62,15 @@ public class MusicSequence {
         _bass.addShortMessage(ShortMessage.CONTROL_CHANGE, 0x7E, 0, (long) 0);
 
         //Set instrument
-        _treble.setInstrument(instrument);
-        _bass.setInstrument(instrument);
+        setInstruments(instrument);
     }
 
     /**
      * Adds a chord to the treble MidiTrack
      *
      * @param chord the Chord to be added
-     * @throws InvalidMidiDataException
      */
-    public void addChordTreble(Chord chord) throws InvalidMidiDataException {
+    public void addChordTreble(Chord chord) {
         _treble.addChord(chord);
     }
 
@@ -73,9 +78,8 @@ public class MusicSequence {
      * Adds a chord to the bass MidiTrack
      *
      * @param chord the Chord to be added
-     * @throws InvalidMidiDataException
      */
-    public void addChordBass(Chord chord) throws InvalidMidiDataException {
+    public void addChordBass(Chord chord) {
         _bass.addChord(chord);
     }
 
@@ -84,9 +88,8 @@ public class MusicSequence {
      *
      * @param duration duration of the note
      * @param note     the note to add
-     * @throws InvalidMidiDataException
      */
-    public void addNoteTreble(long duration, Note note) throws InvalidMidiDataException {
+    public void addNoteTreble(long duration, Note note) {
         _treble.addNote(duration, note);
     }
 
@@ -95,9 +98,8 @@ public class MusicSequence {
      *
      * @param duration duration of the note
      * @param note     the note to add
-     * @throws InvalidMidiDataException
      */
-    public void addNoteBass(long duration, Note note) throws InvalidMidiDataException {
+    public void addNoteBass(long duration, Note note) {
         _bass.addNote(duration, note);
     }
 
@@ -123,20 +125,18 @@ public class MusicSequence {
      * Changes the instrument of both the bass and treble MidiTrack
      *
      * @param instrument the code of the instrument to change to
-     * @throws InvalidMidiDataException
      */
-    public void changeInstrument(int instrument) throws InvalidMidiDataException {
-        changeInstrumentTreble(instrument);
-        changeInstrumentBass(instrument);
+    public void setInstruments(int instrument) {
+        setInstrumentTreble(instrument);
+        setInstrumentBass(instrument);
     }
 
     /**
      * Changes the instrument of the treble MidiTrack
      *
      * @param instrument the code of the instrument to change to
-     * @throws InvalidMidiDataException
      */
-    public void changeInstrumentTreble(int instrument) throws InvalidMidiDataException {
+    public void setInstrumentTreble(int instrument) {
         _treble.setInstrument(instrument);
     }
 
@@ -144,18 +144,15 @@ public class MusicSequence {
      * Changes the instrument of the bass MidiTrack
      *
      * @param instrument the code of the instrument to change to
-     * @throws InvalidMidiDataException
      */
-    public void changeInstrumentBass(int instrument) throws InvalidMidiDataException {
+    public void setInstrumentBass(int instrument) {
         _bass.setInstrument(instrument);
     }
 
     /**
      * Ends the Sequence at the current timestamp
-     *
-     * @throws InvalidMidiDataException
      */
-    public void endSequence() throws InvalidMidiDataException {
+    public void endSequence() {
         _treble.setEndOfTrack();
         _bass.setEndOfTrack();
     }
@@ -164,11 +161,29 @@ public class MusicSequence {
      * Writes the sequence to the given filename
      *
      * @param filename the filename of were to write the sequence
-     * @throws IOException
      */
-    public void write(String filename) throws IOException {
+    public void write(String filename) {
         File file = new File(filename);
-        MidiSystem.write(_sequence, 1, file);
+        try {
+            MidiSystem.write(_sequence, 1, file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
+    public void writeAndPlay(String filename) {
+        try {
+            Sequencer sequencer = MidiSystem.getSequencer();
+            sequencer.open();
+            sequencer.setSequence(MidiSystem.getSequence(new File(filename)));
+            sequencer.start();
+            while (sequencer.getTickLength() > sequencer.getTickPosition()) {
+
+            }
+            sequencer.stop();
+            sequencer.close();
+        } catch (MidiUnavailableException | InvalidMidiDataException | IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
