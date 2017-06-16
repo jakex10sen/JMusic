@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class PokemonIntro {
 
-    public static final int TICKS = 3;
+    private static final int TICKS = 3;
 
     public static void main(String[] args) throws InvalidMidiDataException {
         Sequence sequence = new Sequence(Sequence.PPQ, TICKS);

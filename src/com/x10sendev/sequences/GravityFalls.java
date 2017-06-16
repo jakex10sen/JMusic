@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class GravityFalls {
 
-    public static final int TICKS = 3;
+    private static final int TICKS = 3;
 
 
     public static void main(String[] args) throws MidiUnavailableException, InvalidMidiDataException, IOException {

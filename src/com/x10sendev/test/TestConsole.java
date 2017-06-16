@@ -12,13 +12,13 @@ import java.io.PrintStream;
 
 public class TestConsole extends Application {
 
-    TextArea output;
-    Button button;
-    VBox box;
-    Scene scene;
+    private TextArea output;
+    private Button button;
+    private VBox box;
+    private Scene scene;
 
-    Console console;
-    PrintStream printStream;
+    private Console console;
+    private PrintStream printStream;
 
 
     public static void main(String[] args) {

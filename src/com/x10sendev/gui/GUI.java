@@ -21,15 +21,15 @@ import java.io.PrintStream;
 
 public class GUI extends Application {
 
-    static PrintStream ps;
-    GridPane gridPane;
-    Button synthBtn;
-    ToolBar toolBar;
-    TextArea textArea;
-    ScrollPane scrollPane;
-    Scene scene;
-    Background background;
-    BackgroundFill backgroundFill;
+    private static PrintStream ps;
+    private GridPane gridPane;
+    private Button synthBtn;
+    private ToolBar toolBar;
+    private TextArea textArea;
+    private ScrollPane scrollPane;
+    private Scene scene;
+    private Background background;
+    private BackgroundFill backgroundFill;
 
     public static void main(String[] args) {
         ps = null;
