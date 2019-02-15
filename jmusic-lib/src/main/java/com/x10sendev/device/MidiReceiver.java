@@ -45,7 +45,7 @@ public class MidiReceiver implements Receiver {
 
     @Override
     public void close() {
-
+      _receiver.close();
     }
 
     public void shortMessageReceived(ShortMessage message) {

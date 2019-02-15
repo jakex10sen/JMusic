@@ -1,9 +1,14 @@
 package com.x10sendev.test;
 
 import javax.sound.midi.*;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class App {
   public static void main(String[] args) {
+    Logger logger = LogManager.getLogManager().getLogger(Logger.GLOBAL_LOGGER_NAME);
     try {
       Synthesizer synthesizer = MidiSystem.getSynthesizer();
       synthesizer.open();
@@ -16,19 +21,19 @@ public class App {
       String find = "1345";
 //            String find = "Synth Bass 1";
       for (int i = 0; i < instruments.length; i++) {
-        System.out.println(instruments[i].getName() + " " + i);
+        logger.log(Level.INFO, instruments[i].getName() + " " + i);
         if (instruments[i].getName().contains(find)) {
 //                    System.out.println("-----------------");
 //                    System.out.println("Found: " + find);
 //                    System.out.println("-----------------");
           instrument = instruments[i];
-          System.out.println(find + ": " + i);
+          logger.log(Level.INFO, find + ": " + i);
           break;
         }
       }
 
       if (instrument == null) {
-        System.out.println("Can't find " + find);
+        logger.log(Level.SEVERE, "Can't find " + find);
         System.exit(0);
       }
 
@@ -40,7 +45,7 @@ public class App {
       synthesizer.close();
 
     } catch (MidiUnavailableException e) {
-      e.printStackTrace();
+      logger.log(Level.SEVERE, Arrays.toString(e.getStackTrace()));
     }
   }
 }

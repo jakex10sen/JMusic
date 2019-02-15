@@ -20,7 +20,7 @@ import java.io.PrintStream;
 
 public class GUI extends Application {
 
-  private static PrintStream ps;
+  private PrintStream ps;
   private GridPane gridPane;
   private Button synthBtn;
   private ToolBar toolBar;
@@ -31,11 +31,7 @@ public class GUI extends Application {
   private BackgroundFill backgroundFill;
 
   public static void main(String[] args) {
-    ps = null;
     launch(args);
-    if (ps != null) {
-      ps.close();
-    }
   }
 
   @Override
@@ -77,10 +73,15 @@ public class GUI extends Application {
 
     scene = new Scene(gridPane);
     scene.setFill(Color.SLATEGRAY);
-    scene.getStylesheets().add("com/x10sendev/gui/style.css");
 
 
     stage.setScene(scene);
     stage.show();
+  }
+
+  @Override
+  public void stop() throws Exception {
+    super.stop();
+    ps.close();
   }
 }
